@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Type" content="application/json">
+    <title>EvidenZ BCDT Metrics</title>
+    <link rel="stylesheet" href="https://bootswatch.com/4/cerulean/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class='row'>&nbsp;</div>
+      
+        <div class="jumbotron">
+          <h1 class="display-3">EvidenZ BCDT Metrics</h1>
+          <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+<!--           <hr class="my-4">
+          <p>It uses utility classes for typography and spacing to space content out within the larger container.</p> -->
+        </div>     
+      <div class='row' id="loading">
+        <div class="col">
+          <p class="text-center">Loading...</p>  
+        </div>
+        
+      </div>
+      <div class='row d-none' id='data'>
+        <div class='col-lg-4'>
+          <div class="card border-secondary mb-3" style="">
+            <div class="card-header">BCDT MarketCap</div>
+            <div class="card-body text-monospace">
+              <h4 class="card-title">ETH <span class="float-right marketCapETH"></span></h4>
+              <h4 class="card-title">USD <span class="float-right marketCapUSD"></span></h4>
+              <h4 class="card-title">EUR <span class="float-right marketCapEUR"></span></h4>
+            </div>
+          </div>
+          <div class="card border-secondary mb-3" style="">
+            <div class="card-header">BCDT Price</div>
+            <div class="card-body text-monospace">
+              <h4 class="card-title">ETH <span class="float-right priceBCDTETH"></span></h4>
+              <h4 class="card-title">USD <span class="float-right priceBCDTUSD"></span></h4>
+              <h4 class="card-title">EUR <span class="float-right priceBCDTEUR"></span></h4>
+            </div>
+          </div>        
+          <div class="card border-secondary mb-3" style="">
+            <div class="card-header">BCDT Burn</div>
+            <div class="card-body text-monospace">
+              <h4 class="card-title">Total <span class="float-right totalsupply"></span></h4>
+              <h4 class="card-title">Burned <span class="float-right burntTokens"></span></h4>
+              <h4 class="card-title">% <span class="float-right percentageBurnt"></span></h4>
+            </div>
+          </div>          
+        </div>        
+
+        <div class='col-lg-8'>
+          <div class="card border-primary mb-3" style="">
+            <div class="card-header">BCDT Repartition</div>
+            <div class="card-body">
+              <h4 class="card-title">Primary card title</h4>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <div id="splitpie"></div>
+            </div>
+          </div>
+  <!--         <div class="card border-secondary mb-3" style="max-width: 20rem;">
+            <div class="card-header">Header</div>
+            <div class="card-body">
+              <h4 class="card-title">Secondary card title</h4>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+          </div>   -->      
+        </div>       
+      </div>
+    </div> 
+
+
+
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+  </body>
+    <script>
+      var web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/v3/7826b81f0f1e4ee5ba4ce001ffbba645"));
+
+      var BCDiplomaABI = web3.eth.contract([{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"currentState","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"mintAsideTokens","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getRemainingEthersForCurrentRound","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"withdraw","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"rateETH_BCDT","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_presaleCapInETH","type":"uint256"},{"name":"_round1CapInETH","type":"uint256"},{"name":"_softCapInETH","type":"uint256"},{"name":"_rateETH_BCDT","type":"uint256"}],"name":"updateCapsAndRate","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"tokensSold","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_newState","type":"uint8"}],"name":"setState","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"presaleCap","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_address","type":"address"}],"name":"checkRegistrationStatus","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"asideTokensHaveBeenMinted","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"communityAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"softCap","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_reserveAddress","type":"address"},{"name":"_communityAddress","type":"address"},{"name":"_founderAddress","type":"address"}],"name":"setTokenAsideAddresses","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"asideTokensMintDate","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_address","type":"address"},{"name":"_isRegistered","type":"bool"}],"name":"changeRegistrationStatusForGoldWhiteList","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_targets","type":"address[]"},{"name":"_isRegistered","type":"bool"}],"name":"massChangeRegistrationStatusForGoldWhiteList","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"round1Cap","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"vestedAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"},{"name":"_spender","type":"address"}],"name":"allowance","outputs":[{"name":"remaining","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"whiteLister","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_targets","type":"address[]"},{"name":"_isRegistered","type":"bool"}],"name":"massChangeRegistrationStatusForSilverWhiteList","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"reserveAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_address","type":"address"},{"name":"_isRegistered","type":"bool"}],"name":"changeRegistrationStatusForSilverWhiteList","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_newWhiteLister","type":"address"}],"name":"setWhitelister","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getBCDTRateForCurrentRound","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"amount","type":"uint256"}],"name":"AsideTokensHaveBeenAllocated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"amount","type":"uint256"}],"name":"Withdraw","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"timestamp","type":"uint256"},{"indexed":false,"name":"currentState","type":"uint8"}],"name":"StateChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_address","type":"address"},{"indexed":false,"name":"_isRegistered","type":"bool"}],"name":"SilverWhitelist","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_address","type":"address"},{"indexed":false,"name":"_isRegistered","type":"bool"}],"name":"GoldWhitelist","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"newWhiteLister","type":"address"}],"name":"SetWhitelister","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"previousOwner","type":"address"},{"indexed":true,"name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_from","type":"address"},{"indexed":true,"name":"_to","type":"address"},{"indexed":false,"name":"_value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_owner","type":"address"},{"indexed":true,"name":"_spender","type":"address"},{"indexed":false,"name":"_value","type":"uint256"}],"name":"Approval","type":"event"}]);
+
+      var BCDiploma = BCDiplomaABI.at('0xacfa209fb73bf3dd5bbfb1101b9bc999c49062a5');
+      
+      var totalSupply =  BCDiploma.totalSupply().c[0] / 10000;
+      var foundersTokens = BCDiploma.balanceOf('0xd79637a8c7A633dD22c04eB0b1A497810C66753a').c[0] / 10000;
+      var reserveTokens = BCDiploma.balanceOf('0xaa0c005d49ea61aeb117205099713791a56476ef').c[0] / 10000;
+      var burntTokens = BCDiploma.balanceOf('0x0000000000000000000000000000000000000001').c[0] / 10000;
+      var circulatingSupply = totalSupply - burntTokens - foundersTokens;
+      var percentageBurnt = parseFloat((burntTokens / totalSupply  * 100).toFixed(5));
+      var priceETHUSD;
+      var priceETHEUR;
+      var priceBCDTETH;
+      var data;
+      
+
+      $(document).ready(function() {
+        main();
+      });
+
+      async function main() {
+        await $.ajax({
+          url: 'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD',
+          type: 'GET',
+          success: function (data) {
+            priceETHUSD = data.USD;
+          }
+        });
+        await $.ajax({
+          url: 'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=EUR',
+          type: 'GET',
+          success: function (data) {
+            priceETHEUR = data.EUR;
+          }
+        });
+        await $.ajax({
+          url: 'https://api.idex.market/returnTicker?market=ETH_BCDT',
+          type: 'GET',
+          success: function (data) {
+            priceBCDTETH = parseFloat(parseFloat(data.last).toFixed(6));
+            priceBCDTEUR = parseFloat(parseFloat(priceBCDTETH*priceETHEUR).toFixed(6));
+            priceBCDTUSD = parseFloat(parseFloat(priceBCDTETH*priceETHUSD).toFixed(6));
+          }
+        })
+        await load();
+        await display();
+
+      };
+
+      function load(){
+        var marketCapEUR = parseFloat((circulatingSupply * priceETHEUR * priceBCDTETH).toFixed(0));
+        var marketCapUSD = parseFloat((circulatingSupply * priceETHUSD * priceBCDTETH).toFixed(0));
+        var marketCapETH = parseFloat((circulatingSupply * priceBCDTETH).toFixed(0));
+
+        // JSONString will be used with JSON.parse to make a JSON object out of it.
+        // var JSONString = "{" + 
+        //   "\"Total supply\" : \"" + totalSupply + 
+        //   "\", \"Reserve tokens\" : \"" + reserveTokens + 
+        //   "\", \"Founders tokens\" : \"" + foundersTokens + 
+        //   "\", \"Burnt tokens\" : \"" + burntTokens +
+        //   "\", \"Circulating supply\" : \"" + circulatingSupply +  
+        //   "\", \"Percentage burnt\" : \"" + percentageBurnt + "%" +
+        //   "\", \"ETH per BCDT\" : \"" + priceBCDTETH +
+        //   "\", \"Marketcap (ETH)\" : \"" + marketCapETH +
+        //   "\", \"Marketcap (USD)\" : \"" + marketCapUSD +
+        //   "\", \"Marketcap (EUR)\" : \"" + marketCapEUR +
+        //   "\"" +
+        // "}";
+
+
+        var JSONString = {};
+        JSONString.totalsupply = totalSupply.toFixed(0);
+        JSONString.reserveTokens = reserveTokens;
+        JSONString.foundersTokens = foundersTokens;
+        JSONString.burntTokens = burntTokens.toFixed(0);
+        JSONString.circulatingSupply = circulatingSupply;
+        JSONString.percentageBurnt = percentageBurnt;
+        JSONString.priceBCDTETH = priceBCDTETH;
+        JSONString.priceBCDTEUR = priceBCDTEUR;
+        JSONString.priceBCDTUSD = priceBCDTUSD;
+        JSONString.marketCapETH = marketCapETH;
+        JSONString.marketCapUSD = marketCapUSD;
+        JSONString.marketCapEUR = marketCapEUR;
+
+
+        data = JSONString;
+
+        // JSONString.reserveTokens'] = reserveTokens;
+
+        // var objJsonString = JSON.parse(JSONString);
+        var myJSON = JSON.stringify(JSONString);
+        // document.body.innerHTML  = myJSON;
+        // document.write(myJSON);
+        console.log(JSONString);
+      }
+
+      function display(){
+        console.log(data);
+
+        // Autofill named ID
+        $.each(data, function(index, val) {
+           if ($("."+index).length > 0)
+            $('.'+index).html(numberWithCommas(val));
+
+        });
+
+        var pie = [];
+        var circ = {};
+        circ.name = 'Circulating';
+        circ.y = data.circulatingSupply;
+        pie.push(circ);
+        var burn = {};
+        burn.name = 'Burned';
+        burn.y = parseFloat(data.burntTokens);
+        pie.push(burn);        
+        var founders = {};
+        founders.name = 'Founders';
+        founders.y = data.foundersTokens;
+        pie.push(founders);    
+        var reserve = {};
+        reserve.name = 'Reserve';
+        reserve.y = data.reserveTokens;
+        pie.push(reserve);    
+        console.log(pie);
+        makepie('splitpie',pie);
+
+        $('#loading').hide();
+        $('#data').removeClass('d-none');
+
+        // $('#marketCapETH').html(numberWithCommas(data.marketCapETH));
+        // $('#marketCapUSD').html(numberWithCommas(data.marketCapUSD));
+        // $('#marketCapEUR').html(numberWithCommas(data.marketCapEUR));
+        // $('#priceBCDTETH').html(numberWithCommas(data.priceBCDTETH));
+        // $('#marketCapEUR').html(numberWithCommas(data.marketCapEUR));
+      }
+
+      const numberWithCommas = (x) => {
+        var parts = x.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+      }
+
+      function makepie(target,data){
+
+        Highcharts.chart(target, {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: ''
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b><br> Tokens: <b>{point.y:.1f}</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                name: 'BCDT',
+                colorByPoint: true,
+                data: data
+            }],
+            credits: {
+                enabled: false
+            }            
+                  });
+
+
+      }
+
+
+      </script>  
+</html>
