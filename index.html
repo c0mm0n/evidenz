@@ -85,10 +85,12 @@
       var BCDiploma = BCDiplomaABI.at('0xacfa209fb73bf3dd5bbfb1101b9bc999c49062a5');
       
       var totalSupply =  BCDiploma.totalSupply().c[0] / 10000;
+      console.log(totalSupply);
       var foundersTokens = BCDiploma.balanceOf('0xd79637a8c7A633dD22c04eB0b1A497810C66753a').c[0] / 10000;
       var reserveTokens = BCDiploma.balanceOf('0xaa0c005d49ea61aeb117205099713791a56476ef').c[0] / 10000;
       var burntTokens = BCDiploma.balanceOf('0x0000000000000000000000000000000000000001').c[0] / 10000;
-      var circulatingSupply = totalSupply - burntTokens - foundersTokens;
+      var circulatingSupply = totalSupply - burntTokens - foundersTokens - reserveTokens;
+      console.log(circulatingSupply);
       var percentageBurnt = parseFloat((burntTokens / totalSupply  * 100).toFixed(5));
       var priceETHUSD;
       var priceETHEUR;
